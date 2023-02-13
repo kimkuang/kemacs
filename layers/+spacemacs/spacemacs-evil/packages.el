@@ -1,6 +1,6 @@
 ;;; packages.el --- Spacemacs Evil Layer packages File
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -27,8 +27,8 @@
         evil-args
         evil-collection
         evil-cleverparens
-        evil-ediff
-        evil-escape
+        (evil-escape :location (recipe :fetcher github
+                                       :repo "smile13241324/evil-escape"))
         evil-exchange
         evil-goggles
         evil-iedit-state
@@ -39,9 +39,6 @@
         evil-matchit
         evil-numbers
         evil-surround
-        ;; Temporarily disabled, pending the resolution of
-        ;; https://github.com/7696122/evil-terminal-cursor-changer/issues/8
-        ;; evil-terminal-cursor-changer
         evil-textobj-line
         evil-tutor
         (evil-unimpaired :location (recipe :fetcher local))
@@ -227,12 +224,9 @@
     :defer t
     :init
     (progn
-      ;; Override the default keys, as they collide (with what ? :-))
-      (setq evil-lion-left-align-key nil
-            evil-lion-right-align-key nil)
-      (spacemacs/set-leader-keys
-        "xal" 'evil-lion-left
-        "xaL" 'evil-lion-right))
+      (evil-define-key '(normal visual) 'global
+        "gl" #'evil-lion-left
+        "gL" #'evil-lion-right))
     :config (evil-lion-mode)))
 
 (defun spacemacs-evil/init-evil-lisp-state ()
@@ -244,6 +238,13 @@
       (setq evil-lisp-state-global t))
     :config
     (progn
+      (bind-map spacemacs-default-map
+        :prefix-cmd spacemacs-cmds
+        :evil-keys (dotspacemacs-leader-key)
+        :evil-states (lisp)
+        :override-minor-modes t
+        :override-mode-name spacemacs-leader-override-mode)
+
       (spacemacs/set-leader-keys "k" evil-lisp-state-map)
       (spacemacs/declare-prefix
         "k" "lisp"
@@ -362,13 +363,6 @@
     (progn
       (global-evil-surround-mode 1))))
 
-(defun spacemacs-evil/init-evil-terminal-cursor-changer ()
-  (use-package evil-terminal-cursor-changer
-    :if (not (display-graphic-p))
-    :init (setq evil-visual-state-cursor 'box
-                evil-insert-state-cursor 'bar
-                evil-emacs-state-cursor 'hbar)))
-
 (defun spacemacs-evil/init-evil-textobj-line ()
   ;; No laziness here, the line text object should be available right away.
   (use-package evil-textobj-line))
@@ -422,9 +416,8 @@
          "Globally display a ~ on empty lines in the fringe."
          :evil-leader "T~")
        ;; don't enable it on some special buffers
-       ;; (with-current-buffer spacemacs-buffer-name
-       ;;   (spacemacs/disable-vi-tilde-fringe))
-
+       (with-current-buffer spacemacs-buffer-name
+         (spacemacs/disable-vi-tilde-fringe))
        (add-hook 'which-key-init-buffer-hook 'spacemacs/disable-vi-tilde-fringe)
        ;; after a major mode is loaded, check if the buffer is read only
        ;; if so, disable vi-tilde-fringe-mode

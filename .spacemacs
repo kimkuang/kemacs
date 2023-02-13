@@ -39,8 +39,11 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      ;; helm
-     ivy
-     lsp
+     (ivy :variables ivy-enable-advanced-buffer-information nil
+                     ivy-initial-inputs-alist nil ;;nodisplay ^
+          )
+     ;; ivy
+     ;; lsp
      ;; markdown
      multiple-cursors
      ;; org
@@ -166,6 +169,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default 'vim)
    dotspacemacs-editing-style 'vim
 
+   dotspacemacs-evil-show-empty-line-indicators t
    ;; If non-nil show the version string in the Spacemacs buffer. It will
    ;; appear as (spacemacs version)@(emacs version)
    ;; (default t)
@@ -178,6 +182,7 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner nil ;; 'official
+   dotspacemacs-startup-banner-scale 'auto
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -344,7 +349,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup nil
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -353,12 +358,12 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
    ;; borderless fullscreen. (default nil)
-   dotspacemacs-undecorated-at-startup t
+   dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
@@ -554,4 +559,20 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; FIXME: --vimgrep will break ivy-occur with wgrep
+  (setq counsel-async-split-string-re "\r?\n")
+
+  ;; auto coding system
+  (setq system-time-locale "en_US")
+  (set-language-environment "UTF-8")
+  (setq-default default-buffer-file-coding-system 'utf-8)
+  ;; (setq coding-system-for-write 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (prefer-coding-system 'gb18030)
+  (prefer-coding-system 'utf-8)
+
 )

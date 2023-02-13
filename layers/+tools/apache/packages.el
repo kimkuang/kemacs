@@ -1,8 +1,8 @@
-;;; packages.el --- Github Layer packages File for Spacemacs
+;;; packages.el --- apache layer packages file for Spacemacs.
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
+;; Author: Nathaniel Waisbrot <code@waisbrot.net>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -20,24 +20,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; Package deprecation notice shown at startup
-(warn "`github' layer is deprecated. See layer README.org for details.")
 
+(defconst apache-packages '(apache-mode))
 
-(defconst github-packages
-  '(
-    grip-mode
-    ;; this package does not exits, we need it to wrap
-    ;; the call to spacemacs/declare-prefix.
-    (spacemacs-github :location built-in)))
-
-(defun github/init-grip-mode ()
-  (use-package grip-mode
-    :defer t
-    :init
-    (progn
-      (spacemacs/set-leader-keys
-        "ghp" 'grip-mode))))
-
-(defun github/init-spacemacs-github ()
-  (spacemacs/declare-prefix "gh" "github"))
+(defun apache/init-apache-mode()
+  (use-package apache-mode :defer t))

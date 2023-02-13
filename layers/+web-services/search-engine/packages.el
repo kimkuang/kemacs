@@ -1,6 +1,6 @@
 ;;; packages.el --- search-engine Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -44,6 +44,9 @@
               (bing
                :name "Bing"
                :url "https://www.bing.com/search?q=%s")
+              (docker-hub
+               :name "Docker Hub"
+               :url "https://hub.docker.com/search?q=%s")
               (duck-duck-go
                :name "Duck Duck Go"
                :url "https://duckduckgo.com/?q=%s")

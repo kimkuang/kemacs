@@ -1,6 +1,6 @@
 ;;; config.el --- Spacemacs Defaults Layer configuration File
 ;;
-;; Copyright (c) 2012-2021 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -156,14 +156,13 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (setq minibuffer-prompt-properties
       '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
 ;; Fullscreen/maximize frame on startup
-
-;; (when (and (not spacemacs-initialized)
-;;            dotspacemacs-fullscreen-at-startup)
-;;   ;; spacemacs/toggle-fullscreen-frame-on is NOT available during the startup,
-;;   ;; but IS available during the subsequent config reloads
-;;   (if (fboundp 'spacemacs/toggle-fullscreen-frame-on)
-;;       (spacemacs/toggle-fullscreen-frame-on)
-;;     (spacemacs/toggle-frame-fullscreen)))
+(when (and (not spacemacs-initialized)
+           dotspacemacs-fullscreen-at-startup)
+  ;; spacemacs/toggle-fullscreen-frame-on is NOT available during the startup,
+  ;; but IS available during the subsequent config reloads
+  (if (fboundp 'spacemacs/toggle-fullscreen-frame-on)
+      (spacemacs/toggle-fullscreen-frame-on)
+    (spacemacs/toggle-frame-fullscreen)))
 
 (setq ns-use-native-fullscreen (not dotspacemacs-fullscreen-use-non-native))
 
@@ -240,3 +239,6 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 
 ;; Don't load outdated compiled files.
 (setq load-prefer-newer t)
+
+;; Suppress the *Warnings* buffer when native compilation shows warnings.
+(setq native-comp-async-report-warnings-errors 'silent)
