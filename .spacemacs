@@ -29,6 +29,7 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ;; python
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -42,11 +43,18 @@ This function should only modify configuration layer settings."
      (ivy :variables ivy-enable-advanced-buffer-information nil
                      ivy-initial-inputs-alist nil ;;nodisplay ^
           )
+
      ;; ivy
      ;; lsp
      ;; markdown
      multiple-cursors
      ;; org
+
+     (org :variables org-want-todo-bindings t
+          ;; org-enable-hugo-support t
+          org-enable-valign t
+          org-enable-org-journal-support t
+          org-enable-roam-support nil)
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -120,7 +128,7 @@ It should only modify the values of Spacemacs settings."
    ;; This variable has no effect if Emacs is launched with the parameter
    ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
-   dotspacemacs-elpa-https t
+   dotspacemacs-elpa-https nil ;;t
 
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
@@ -148,7 +156,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
    ;; (default t)
-   dotspacemacs-verify-spacelpa-archives t
+   dotspacemacs-verify-spacelpa-archives nil
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -195,8 +203,10 @@ It should only modify the values of Spacemacs settings."
    ;; number is the project limit and the second the limit on the recent files
    ;; within a project.
    dotspacemacs-startup-lists '((recents . 5)
-                                (bookmarks . 5)
-                                (projects . 7))
+                                ;; (todos . 5)
+                                ;; (bookmarks . 5)
+                                (projects . 7)
+                                )
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -304,7 +314,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
    ;; effect when using the "jump to layout by number" commands. (default nil)
-   dotspacemacs-auto-generate-layout-names nil
+   dotspacemacs-auto-generate-layout-names 't
 
    ;; Size (in MB) above which spacemacs will prompt to open the large file
    ;; literally to avoid performance issues. Opening a file literally means that
@@ -349,21 +359,21 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t ;;nil
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
-   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-fullscreen-use-non-native t ;;nil
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t ;;nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
    ;; borderless fullscreen. (default nil)
-   dotspacemacs-undecorated-at-startup nil
+   dotspacemacs-undecorated-at-startup t ;;nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
@@ -575,4 +585,51 @@ before packages are loaded."
   (prefer-coding-system 'gb18030)
   (prefer-coding-system 'utf-8)
 
+;;; window size
+  (global-set-key [f7] 'evil-window-increase-width)
+  (global-set-key [f8] 'evil-window-increase-height)
+
+  ;; (global-hungry-delete-mode t)
+  (spacemacs|diminish helm-gtags-mode)
+  (spacemacs|diminish ggtags-mode)
+  (spacemacs|diminish which-key-mode)
+  (spacemacs|diminish spacemacs-whitespace-cleanup-mode)
+  (spacemacs|diminish counsel-mode)
+
+  (which-key-setup-minibuffer)
+
+  (defun kemacs-ui/post-init-diminish ()
+    (progn
+      (with-eval-after-load 'whitespace
+        (diminish 'whitespace-mode))
+      (with-eval-after-load 'smartparens
+        (diminish 'smartparens-mode))
+      (with-eval-after-load 'which-key
+        (diminish 'which-key-mode))
+      (with-eval-after-load 'hungry-delete
+        (diminish 'hungry-delete-mode))))
+
+  (setq importmagic-be-quiet t)
+
+)
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(dap-mode lsp-docker bui helm-cscope helm-gtags helm-pydoc lsp-pyright lsp-python-ms org pylookup stickyfunc-enhance xcscope org-projectile youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode wrap-region winum which-key wgrep web-mode web-beautify vterm volatile-highlights visual-regexp-steroids vim-powerline vi-tilde-fringe valign uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org tiny tide terminal-here tagedit symon symbol-overlay string-inflection string-edit ssh-agency sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smex slim-mode sicp shell-pop seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rjsx-mode rime reveal-in-osx-finder restart-emacs rbenv rainbow-mode rainbow-identifiers rainbow-delimiters racket-mode racer quickrun pytest pyenv-mode pydoc py-isort pug-mode projectile-rails prodigy prettier-js popwin poetry pippel pipenv pip-requirements peep-dired password-generator paradox pangu-spacing overseer osx-trash osx-dictionary osx-clipboard orgit-forge org-superstar org-rich-yank org-pomodoro org-pdftools org-mime org-journal org-download org-contrib org-cliplink opencl-mode open-junk-file ob-restclient ob-http npm-mode nov nose nodejs-repl nameless mwim multi-term multi-line mmm-mode minitest markdown-toc macrostep lsp-ui lsp-treemacs lsp-origami lsp-ivy lsp-haskell lorem-ipsum live-py-mode lispyville link-hint launchctl json-reformat json-navigator json-mode js2-refactor js-doc ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra ivy-avy inspector info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete holy-mode hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation highlight-global hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org helm-mode-manager helm-make helm-github-stars helm-descbinds helm-ag haskell-snippets graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot glsl-mode gitignore-templates git-timemachine git-modes git-messenger git-link ggtags gendoxy fuzzy font-lock+ flyspell-correct-ivy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flx-ido find-file-in-project find-by-pinyin-dired feature-mode fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-terminal-cursor-changer evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help engine-mode emr emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode discover-my-major dired-quick-sort diminish devdocs deft define-word dante cython-mode cuda-mode cpp-auto-include counsel-projectile counsel-gtags counsel-css company-ycmd company-web company-statistics company-rtags company-restclient company-reftex company-math company-lua company-emoji company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode color-identifiers-mode code-cells cmm-mode cmake-font-lock clojure-snippets clean-aindent-mode cider-eval-sexp-fu cider chruby chinese-conv centered-cursor-mode cargo caps-lock bundler blacken auto-yasnippet auto-highlight-symbol auto-compile attrap anki-editor aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell 4clojure)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
+ '(which-key-posframe ((t (:inherit tooltip))))
+ '(which-key-posframe-border ((t (:inherit posframe-border)))))
 )

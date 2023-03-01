@@ -121,25 +121,27 @@ See `spacemacs//fetch-docs-from-root'"
     (car r)))
 
 (defun spacemacs//format-content (&rest r)
-  (let* ((content (car r))
-         ;; FIXME:  This string has changed and we got a hard to catch bug
-         ;;         Total number of times we got owned by the div: 1
-         ;;         Increase the counter next time or find a better way to look
-         ;;         up beginning of content.
-         (div-string "<div id=\"content\" class=\"content\">")
-         ;; onclick below tries to send user to the same path but at a different domain
-         ;; the href attribute is a fallback in case javascript is disabled
-         (toc-string "<div id=\"toggle-sidebar\"><a href=\"#table-of-contents\"><h2>Table of Contents</h2></a></div>")
-         (has-toc (s-index-of "Table of Contents" content))
-         (indx-of-div-str (or (s-index-of div-string content t)
-                              (signal 'search-failed "Can't find content div")))
-         (beginning-of-content-div-pos (+ (length div-string) indx-of-div-str))
-         (beginning-of-content (substring content
-                                          0 beginning-of-content-div-pos))
-         (rest-of-content (substring content beginning-of-content-div-pos)))
-    (if (not (null has-toc))
-        (format "%s\n%s%s" beginning-of-content toc-string rest-of-content)
-      content)))
+
+  ;; (let* ((content (car r))
+  ;;        ;; FIXME:  This string has changed and we got a hard to catch bug
+  ;;        ;;         Total number of times we got owned by the div: 1
+  ;;        ;;         Increase the counter next time or find a better way to look
+  ;;        ;;         up beginning of content.
+  ;;        (div-string "<div id=\"content\" class=\"content\">")
+  ;;        ;; onclick below tries to send user to the same path but at a different domain
+  ;;        ;; the href attribute is a fallback in case javascript is disabled
+  ;;        (toc-string "<div id=\"toggle-sidebar\"><a href=\"#table-of-contents\"><h2>Table of Contents</h2></a></div>")
+  ;;        (has-toc (s-index-of "Table of Contents" content))
+  ;;        (indx-of-div-str (or (s-index-of div-string content t)
+  ;;                             (signal 'search-failed "Can't find content div")))
+  ;;        (beginning-of-content-div-pos (+ (length div-string) indx-of-div-str))
+  ;;        (beginning-of-content (substring content
+  ;;                                         0 beginning-of-content-div-pos))
+  ;;        (rest-of-content (substring content beginning-of-content-div-pos)))
+  ;;   (if (not (null has-toc))
+  ;;       (format "%s\n%s%s" beginning-of-content toc-string rest-of-content)
+  ;;     content))
+  )
 
 
 (defun spacemacs//toc-org-unhrefify-toc ()

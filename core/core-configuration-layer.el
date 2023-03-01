@@ -672,7 +672,8 @@ To prevent package from being installed or uninstalled set the variable
                      (eq 'used-only dotspacemacs-install-packages))
                  (not configuration-layer-force-distribution)
                  (not configuration-layer-exclude-all-layers))
-        (configuration-layer/delete-orphan-packages packages))))
+        ;; (configuration-layer/delete-orphan-packages packages)
+        )))
   ;; configure used packages
   (configuration-layer//configure-packages configuration-layer--used-packages)
   ;; evaluate layer variables a second time to override default values set in
@@ -2458,12 +2459,12 @@ depends on it."
           (setq deleted-count 0)
           (dolist (orphan orphans)
             (setq deleted-count (1+ deleted-count))
-            (spacemacs-buffer/replace-last-line
-             (format "--> deleting %s... [%s/%s]"
-                     orphan
-                     deleted-count
-                     orphans-count) t)
-            (configuration-layer//package-delete orphan)
+            ;; (spacemacs-buffer/replace-last-line
+            ;;  (format "--> deleting %s... [%s/%s]"
+            ;;          orphan
+            ;;          deleted-count
+            ;;          orphans-count) t)
+            ;; (configuration-layer//package-delete orphan)
             (spacemacs//redisplay))
           (spacemacs-buffer/append "\n"))
       (spacemacs-buffer/message "No orphan package to delete."))))

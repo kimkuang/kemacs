@@ -41,7 +41,7 @@
 (defconst spacemacs-buffer-version-info "0.999"
   "Current version used to display addition release information.")
 
-(defconst spacemacs-buffer-name "*spacemacs*"
+(defconst spacemacs-buffer-name "*HOME*"
   "The name of the spacemacs buffer.")
 
 (defconst spacemacs-buffer-logo-title "[S P A C E M A C S]"
@@ -183,42 +183,46 @@ FILE: the path to the file containing the banner."
      (buffer-string))))
 
 (defun spacemacs-buffer/insert-banner-and-buttons ()
-  "Choose a banner according to `dotspacemacs-startup-banner'and insert it.
-in spacemacs buffer along with quick buttons underneath.
-Easter egg:
-Doge special text banner can be reachable via `999', `doge' or `random*'.
-Doge special text banner for dark themes can be reachable via `997',
-`doge-inverted' or `random*'.
-Cate special text banner can de reachable via `998', `cat' or `random*'.
-`random' ignore special banners whereas `random*' does not."
-  (let ((banner (spacemacs-buffer//choose-banner))
-        (buffer-read-only nil))
-    (when banner
-      (spacemacs-buffer/message (format "Banner: %s" banner))
-      (if (image-type-available-p (intern (file-name-extension banner)))
-          (spacemacs-buffer//insert-image-banner banner)
-        (spacemacs-buffer//insert-ascii-banner-centered banner)))
-    (spacemacs-buffer//insert-buttons)
-    (spacemacs//redisplay)))
+;;   "Choose a banner according to `dotspacemacs-startup-banner'and insert it.
+;; in spacemacs buffer along with quick buttons underneath.
+;; Easter egg:
+;; Doge special text banner can be reachable via `999', `doge' or `random*'.
+;; Doge special text banner for dark themes can be reachable via `997',
+;; `doge-inverted' or `random*'.
+;; Cate special text banner can de reachable via `998', `cat' or `random*'.
+;; `random' ignore special banners whereas `random*' does not."
+;;   (let ((banner (spacemacs-buffer//choose-banner))
+;;         (buffer-read-only nil))
+;;     (when banner
+;;       (spacemacs-buffer/message (format "Banner: %s" banner))
+;;       (if (image-type-available-p (intern (file-name-extension banner)))
+;;           (spacemacs-buffer//insert-image-banner banner)
+;;         (spacemacs-buffer//insert-ascii-banner-centered banner)))
+;;     (spacemacs-buffer//insert-buttons)
+;;     (spacemacs//redisplay))
+
+  )
 
 (defun spacemacs-buffer/display-startup-note ()
-  "Decide of the startup note and display it if relevant."
-  (when (file-exists-p spacemacs-buffer--cache-file)
-    (load spacemacs-buffer--cache-file nil (not init-file-debug)))
-  (cond
-   (spacemacs-buffer--fresh-install
-    ;; we assume the user is  new to spacemacs and open the quickhelp
-    (spacemacs-buffer/toggle-note 'quickhelp)
-    (setq spacemacs-buffer--release-note-version spacemacs-version)
-    (spacemacs/dump-vars-to-file '(spacemacs-buffer--release-note-version)
-                                 spacemacs-buffer--cache-file))
-   ((or (not spacemacs-buffer--release-note-version)
-        (version< spacemacs-buffer--release-note-version
-                  spacemacs-version))
-    ;; check the variable spacemacs-buffer--release-note-version
-    ;; to decide whether we show the release note
-    (spacemacs-buffer/toggle-note 'release-note)))
-  (spacemacs//redisplay))
+  ;; "Decide of the startup note and display it if relevant."
+  ;; (when (file-exists-p spacemacs-buffer--cache-file)
+  ;;   (load spacemacs-buffer--cache-file nil (not init-file-debug)))
+  ;; (cond
+  ;;  (spacemacs-buffer--fresh-install
+  ;;   ;; we assume the user is  new to spacemacs and open the quickhelp
+  ;;   (spacemacs-buffer/toggle-note 'quickhelp)
+  ;;   (setq spacemacs-buffer--release-note-version spacemacs-version)
+  ;;   (spacemacs/dump-vars-to-file '(spacemacs-buffer--release-note-version)
+  ;;                                spacemacs-buffer--cache-file))
+  ;;  ((or (not spacemacs-buffer--release-note-version)
+  ;;       (version< spacemacs-buffer--release-note-version
+  ;;                 spacemacs-version))
+  ;;   ;; check the variable spacemacs-buffer--release-note-version
+  ;;   ;; to decide whether we show the release note
+  ;;   (spacemacs-buffer/toggle-note 'release-note)))
+  ;; (spacemacs//redisplay)
+
+  )
 
 (defun spacemacs-buffer//choose-banner ()
   "Return the full path of a banner based on the dotfile value."
@@ -872,99 +876,102 @@ REAL-WIDTH: the real width of the line.  If the line contains an image, the size
     (end-of-line)))
 
 (defun spacemacs-buffer//insert-buttons ()
-  "Create and insert the interactive buttons under Spacemacs banner."
-  (goto-char (point-max))
-  (spacemacs-buffer||add-shortcut "m" "[?]" t)
-  (widget-create 'url-link
-                 :tag (propertize "?" 'face 'font-lock-doc-face)
-                 :help-echo "Open the quickhelp."
-                 :action (lambda (&rest ignore)
-                           (spacemacs-buffer/toggle-note 'quickhelp))
-                 :mouse-face 'highlight
-                 :follow-link "\C-m")
-  (insert " ")
-  (widget-create 'url-link
-                 :tag (propertize "Homepage" 'face 'font-lock-keyword-face)
-                 :help-echo "Open the Spacemacs GitHub page in your browser."
-                 :mouse-face 'highlight
-                 :follow-link "\C-m"
-                 "https://develop.spacemacs.org")
-  (insert " ")
-  (widget-create 'url-link
-                 :tag (propertize "Documentation" 'face 'font-lock-keyword-face)
-                 :help-echo "Open the Spacemacs documentation in your browser."
-                 :mouse-face 'highlight
-                 :follow-link "\C-m"
-                 "https://develop.spacemacs.org/doc/DOCUMENTATION.html")
-  (insert " ")
-  (widget-create 'url-link
-                 :tag (propertize "Gitter Chat" 'face 'font-lock-keyword-face)
-                 :help-echo
-                 "Ask questions and chat with fellow users in our chat room."
-                 :mouse-face 'highlight
-                 :follow-link "\C-m"
-                 "https://gitter.im/syl20bnr/spacemacs")
-  (insert " ")
-  (widget-create 'push-button
-                 :help-echo "GPLv3 copying conditions."
-                 :action (lambda (&rest ignore)
-                           (find-file (concat spacemacs-start-directory "LICENSE"))
-                           (read-only-mode))
-                 :mouse-face 'highlight
-                 :follow-link "\C-m"
-                 (propertize "Licensing" 'face 'font-lock-keyword-face))
-  (let ((len (- (line-end-position)
-                (line-beginning-position))))
-    (spacemacs-buffer//center-line)
-    (setq spacemacs-buffer--buttons-position (- (line-end-position)
-                                                (line-beginning-position)
-                                                len)))
-  (insert "\n")
-  (widget-create 'push-button
-                 :help-echo "Update all ELPA packages to the latest versions."
-                 :action (lambda (&rest ignore)
-                           (configuration-layer/update-packages))
-                 :mouse-face 'highlight
-                 :follow-link "\C-m"
-                 (propertize "Update Packages" 'face 'font-lock-keyword-face))
-  (insert " ")
-  (widget-create 'push-button
-                 :help-echo
-                 "Rollback ELPA package updates if something got borked."
-                 :action (lambda (&rest ignore)
-                           (call-interactively 'configuration-layer/rollback))
-                 :mouse-face 'highlight
-                 :follow-link "\C-m"
-                 (propertize "Rollback Package Update"
-                             'face 'font-lock-keyword-face))
-  (spacemacs-buffer//center-line)
-  (insert "\n")
-  (widget-create 'push-button
-                 :tag (propertize "Release Notes"
-                                  'face 'font-lock-preprocessor-face)
-                 :help-echo "Hide or show the Changelog"
-                 :action (lambda (&rest ignore)
-                           (spacemacs-buffer/toggle-note 'release-note))
-                 :mouse-face 'highlight
-                 :follow-link "\C-m")
-  (insert " ")
-  (widget-create 'url-link
-                 :tag (propertize "Search in Spacemacs"
-                                  'face 'font-lock-function-name-face)
-                 :help-echo "Search Spacemacs contents."
-                 :action
-                 (lambda (&rest ignore)
-                   (let ((comp-frontend
-                          (cond
-                           ((configuration-layer/layer-used-p 'helm)
-                            'helm-spacemacs-help)
-                           ((configuration-layer/layer-used-p 'ivy)
-                            'ivy-spacemacs-help))))
-                     (call-interactively comp-frontend)))
-                 :mouse-face 'highlight
-                 :follow-link "\C-m")
-  (spacemacs-buffer//center-line)
-  (insert "\n"))
+
+  ;; "Create and insert the interactive buttons under Spacemacs banner."
+  ;; (goto-char (point-max))
+  ;; (spacemacs-buffer||add-shortcut "m" "[?]" t)
+  ;; (widget-create 'url-link
+  ;;                :tag (propertize "?" 'face 'font-lock-doc-face)
+  ;;                :help-echo "Open the quickhelp."
+  ;;                :action (lambda (&rest ignore)
+  ;;                          (spacemacs-buffer/toggle-note 'quickhelp))
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m")
+  ;; (insert " ")
+  ;; (widget-create 'url-link
+  ;;                :tag (propertize "Homepage" 'face 'font-lock-keyword-face)
+  ;;                :help-echo "Open the Spacemacs GitHub page in your browser."
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m"
+  ;;                "https://develop.spacemacs.org")
+  ;; (insert " ")
+  ;; (widget-create 'url-link
+  ;;                :tag (propertize "Documentation" 'face 'font-lock-keyword-face)
+  ;;                :help-echo "Open the Spacemacs documentation in your browser."
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m"
+  ;;                "https://develop.spacemacs.org/doc/DOCUMENTATION.html")
+  ;; (insert " ")
+  ;; (widget-create 'url-link
+  ;;                :tag (propertize "Gitter Chat" 'face 'font-lock-keyword-face)
+  ;;                :help-echo
+  ;;                "Ask questions and chat with fellow users in our chat room."
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m"
+  ;;                "https://gitter.im/syl20bnr/spacemacs")
+  ;; (insert " ")
+  ;; (widget-create 'push-button
+  ;;                :help-echo "GPLv3 copying conditions."
+  ;;                :action (lambda (&rest ignore)
+  ;;                          (find-file (concat spacemacs-start-directory "LICENSE"))
+  ;;                          (read-only-mode))
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m"
+  ;;                (propertize "Licensing" 'face 'font-lock-keyword-face))
+  ;; (let ((len (- (line-end-position)
+  ;;               (line-beginning-position))))
+  ;;   (spacemacs-buffer//center-line)
+  ;;   (setq spacemacs-buffer--buttons-position (- (line-end-position)
+  ;;                                               (line-beginning-position)
+  ;;                                               len)))
+  ;; (insert "\n")
+  ;; (widget-create 'push-button
+  ;;                :help-echo "Update all ELPA packages to the latest versions."
+  ;;                :action (lambda (&rest ignore)
+  ;;                          (configuration-layer/update-packages))
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m"
+  ;;                (propertize "Update Packages" 'face 'font-lock-keyword-face))
+  ;; (insert " ")
+  ;; (widget-create 'push-button
+  ;;                :help-echo
+  ;;                "Rollback ELPA package updates if something got borked."
+  ;;                :action (lambda (&rest ignore)
+  ;;                          (call-interactively 'configuration-layer/rollback))
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m"
+  ;;                (propertize "Rollback Package Update"
+  ;;                            'face 'font-lock-keyword-face))
+  ;; (spacemacs-buffer//center-line)
+  ;; (insert "\n")
+  ;; (widget-create 'push-button
+  ;;                :tag (propertize "Release Notes"
+  ;;                                 'face 'font-lock-preprocessor-face)
+  ;;                :help-echo "Hide or show the Changelog"
+  ;;                :action (lambda (&rest ignore)
+  ;;                          (spacemacs-buffer/toggle-note 'release-note))
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m")
+  ;; (insert " ")
+  ;; (widget-create 'url-link
+  ;;                :tag (propertize "Search in Spacemacs"
+  ;;                                 'face 'font-lock-function-name-face)
+  ;;                :help-echo "Search Spacemacs contents."
+  ;;                :action
+  ;;                (lambda (&rest ignore)
+  ;;                  (let ((comp-frontend
+  ;;                         (cond
+  ;;                          ((configuration-layer/layer-used-p 'helm)
+  ;;                           'helm-spacemacs-help)
+  ;;                          ((configuration-layer/layer-used-p 'ivy)
+  ;;                           'ivy-spacemacs-help))))
+  ;;                    (call-interactively comp-frontend)))
+  ;;                :mouse-face 'highlight
+  ;;                :follow-link "\C-m")
+  ;; (spacemacs-buffer//center-line)
+  ;; (insert "\n")
+
+)
 
 (defun spacemacs-buffer//insert-string-list (list-display-name list)
   "Insert a non-interactive startup list in the home buffer.
@@ -1468,7 +1475,8 @@ not a list. Load `org' and continue?"))
       (save-restriction
         (narrow-to-region (point) (point))
         (spacemacs-buffer//do-insert-startupify-lists)
-        (spacemacs-buffer//center-startup-lists)))))
+        ;; (spacemacs-buffer//center-startup-lists)
+        ))))
 
 (defun spacemacs-buffer/goto-link-line ()
   "Set point to the beginning of the link line."
@@ -1477,7 +1485,8 @@ not a list. Load `org' and continue?"))
     (goto-char (point-min))
     (with-demoted-errors "spacemacs buffer error: %s"
       (search-forward "[")
-      (left-char 2))))
+      (left-char 2)))
+  )
 
 (defun spacemacs-buffer//mouse-1 (event)
   "Action to open widget button at mouse click.
@@ -1544,7 +1553,7 @@ can be adjusted with the variable:
   (with-current-buffer (get-buffer spacemacs-buffer-name)
     (when dotspacemacs-startup-lists
       (spacemacs-buffer/insert-startup-lists))
-    (spacemacs-buffer//insert-footer)
+    ;; (spacemacs-buffer//insert-footer)
     (if configuration-layer-error-count
         (progn
           (spacemacs-buffer-mode)
@@ -1558,7 +1567,8 @@ can be adjusted with the variable:
       (spacemacs-buffer/set-mode-line spacemacs--default-mode-line)
       (spacemacs-buffer-mode))
     (force-mode-line-update)
-    (spacemacs-buffer/goto-link-line)))
+     ;; (spacemacs-buffer/goto-link-line)
+    ))
 
 (defun spacemacs-buffer/goto-buffer (&optional refresh do-not-switch)
   "Create the special buffer for `spacemacs-buffer-mode'.
@@ -1595,16 +1605,17 @@ If a prefix argument is given, switch to it in an other, possibly new window."
             (spacemacs-buffer//notes-redisplay-current-note)
             (when dotspacemacs-startup-lists
               (spacemacs-buffer/insert-startup-lists))
-            (spacemacs-buffer//insert-footer)
+            ;; (spacemacs-buffer//insert-footer)
             (configuration-layer/display-summary emacs-start-time)
             (spacemacs-buffer/set-mode-line spacemacs--default-mode-line)
             (force-mode-line-update)
             (spacemacs-buffer-mode)))
         (if save-line
-           (progn (goto-char (point-min))
-                  (forward-line (1- save-line))
-                  (forward-to-indentation 0))
-         (spacemacs-buffer/goto-link-line)))
+            (progn (goto-char (point-min))
+                   (forward-line (1- save-line))
+                   (forward-to-indentation 0))
+           ;; (spacemacs-buffer/goto-link-line)
+          ))
       (unless do-not-switch
         (if current-prefix-arg
             (switch-to-buffer-other-window spacemacs-buffer-name))

@@ -105,9 +105,9 @@ the final step of executing code in `emacs-startup-hook'.")
   ;;   (unless (frame-parameter nil 'fullscreen)
   ;;     (toggle-frame-maximized))
   ;;   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
-  ;; (spacemacs|unless-dumping
-  ;;   (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init..."))
-  ;; ;; Given the loading process of Spacemacs we have no choice but to set the
+  (spacemacs|unless-dumping
+    (dotspacemacs|call-func dotspacemacs/user-init "Calling dotfile user init..."))
+  ;; Given the loading process of Spacemacs we have no choice but to set the
   ;; custom settings twice:
   ;; - once at the very beginning of startup (here)
   ;; - once at the very end of loading (in `spacemacs/setup-startup-hook')
@@ -124,8 +124,8 @@ the final step of executing code in `emacs-startup-hook'.")
   ;; I don't recall why we must load the custom settings twice and my experiment
   ;; seems to show that we don't need this double loading process anymore.
   ;; related issue: https://github.com/syl20bnr/spacemacs/issues/9736
-  ;; (dotspacemacs|call-func dotspacemacs/emacs-custom-settings
-  ;;                         "Calling dotfile Emacs custom settings...")
+  (dotspacemacs|call-func dotspacemacs/emacs-custom-settings
+                          "Calling dotfile Emacs custom settings...")
   (setq dotspacemacs-editing-style (dotspacemacs//read-editing-style-config
                                     dotspacemacs-editing-style))
   (configuration-layer/initialize)
@@ -158,15 +158,15 @@ the final step of executing code in `emacs-startup-hook'.")
   ;;         (mapconcat 'car dotspacemacs-default-font ", ")
   ;;       (car dotspacemacs-default-font)))))
   ;; spacemacs init
-  ;; (setq inhibit-startup-screen t)
+  (setq inhibit-startup-screen t)
 
   ;; Draw the spacemacs buffer without lists and scalling to avoid having
   ;; to load build-in org which will conflict with elpa org
-  ;; (spacemacs-buffer/goto-buffer t)
+  (spacemacs-buffer/goto-buffer t)
 
   ;; This is set to nil during startup to allow Spacemacs to show buffers opened
   ;; as command line arguments.
-  ;; (setq initial-buffer-choice nil)
+  (setq initial-buffer-choice nil)
   (require 'core-keybindings)
   ;; for convenience and user support
   ;; (unless (fboundp 'tool-bar-mode)
@@ -174,15 +174,16 @@ the final step of executing code in `emacs-startup-hook'.")
   ;;                                     "you won't be able to launch a "
   ;;                                     "graphical instance of Emacs"
   ;;                                     "with this build.")))
-  ;; ;; check for new version
+  ;; check for new version
   ;; (if dotspacemacs-mode-line-unicode-symbols
   ;;     (setq-default spacemacs-version-check-lighter "[⇪]"))
   ;; ;; load environment variables
   (if (fboundp 'dotspacemacs/user-env)
       (dotspacemacs/call-user-env)
-    (spacemacs/load-spacemacs-env))
+    (spacemacs/load-spacemacs-env)
+    )
   ;; install the dotfile if required
-  ;; (dotspacemacs/maybe-install-dotfile)
+  (dotspacemacs/maybe-install-dotfile)
 )
 
 (defun spacemacs//setup-ido-vertical-mode ()
@@ -256,8 +257,8 @@ Note: the hooked function is not executed when in dumped mode."
 ;;      ;;                         spacemacs--fallback-theme t))
      (spacemacs-buffer//startup-hook)
      ;; (configuration-layer/display-summary emacs-start-time)
-;;      ;; (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
-;;      ;; (spacemacs-buffer/goto-link-line)
+     ;; (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
+    ;; (spacemacs-buffer/goto-link-line)
      (setq spacemacs-initialized t)
      (setq gc-cons-threshold (car dotspacemacs-gc-cons)
            gc-cons-percentage (cadr dotspacemacs-gc-cons))
@@ -265,7 +266,9 @@ Note: the hooked function is not executed when in dumped mode."
      ;; Redraw the spacemacs buffer with full org support
      ;; Before it must be drawn without org related features to
      ;; avoid loading build in org in emacs >= 29
-     (spacemacs-buffer/goto-buffer t t)))
+     (spacemacs-buffer/goto-buffer t t)
+     )
+   )
 
   (if dotspacemacs-byte-compile
       (when (> 1 (spacemacs//dir-byte-compile-state
